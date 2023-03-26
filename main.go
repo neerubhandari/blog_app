@@ -18,5 +18,7 @@ func main() {
 	// store the database connection in the Config.DB variable for use throughout the program
 	Config.DB = db
 
+	// Create a new user
+
 	fmt.Println("Connected to database")
 }
