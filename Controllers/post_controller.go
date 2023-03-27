@@ -29,3 +29,22 @@ func (p *PostController) GetAllPosts(c *gin.Context) {
 	}
 	c.JSON(200, gin.H{"data": posts})
 }
+
+// create post
+func CreatePost(c *gin.Context) {
+
+	db := c.MustGet("db").(*gorm.DB)
+
+	var post models.Post
+	if err := c.ShouldBindJSON(&post); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := db.Create(&post).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, gin.H{"data": post})
+}

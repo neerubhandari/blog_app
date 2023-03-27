@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
-
 	"blog_app/Config"
 	controllers "blog_app/Controllers"
+	models "blog_app/Model"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
@@ -19,15 +19,28 @@ func main() {
 	}
 
 	// store the database connection in the Config.DB variable for use throughout the program
-	// Config.DB = db
+	Config.DB = db
 
 	// create a new PostController instance
 	postController := controllers.PostController{DB: db}
 	fmt.Println(postController)
 
 	fmt.Println("Connected to database")
+
+	// Migrate the Post model to the database
+	db.AutoMigrate(&models.Post{})
+
+	// Inject the database connection into the Gin context using middleware
+	router.Use(func(c *gin.Context) {
+		c.Set("db", db)
+		c.Next()
+	})
 	// map the GetAllPosts function to a GET request for the "/posts" endpoint
 	router.GET("/posts", postController.GetAllPosts)
-	router.Run(":8081")
+
+	// Register the CreatePost function as a handler
+	router.POST("/posts", controllers.CreatePost)
+
+	router.Run(":8083")
 
 }
