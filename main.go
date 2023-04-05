@@ -41,6 +41,8 @@ func main() {
 	// Register the CreatePost function as a handler
 	router.POST("/posts", controllers.CreatePost)
 
-	router.Run(":8083")
+	//GET PARTICULAR POST BASED ON THE ID
+	router.GET("/posts/:id", controllers.FindPost)
+	router.Run(":8084")
 
 }
