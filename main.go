@@ -43,6 +43,9 @@ func main() {
 
 	//GET PARTICULAR POST BASED ON THE ID
 	router.GET("/posts/:id", controllers.FindPost)
+
+	//DELETE THE POST
+	router.DELETE("/posts/:id", controllers.DeletePost) // new
 	router.Run(":8084")
 
 }

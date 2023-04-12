@@ -62,3 +62,18 @@ func FindPost(c *gin.Context) { // Get model if exist
 
 	c.JSON(http.StatusOK, gin.H{"data": post})
 }
+
+// DELETE /books/:id
+// Delete a book
+func DeletePost(c *gin.Context) {
+	// Get model if exist
+	db := c.MustGet("db").(*gorm.DB)
+	var post models.Post
+	if err := db.Where("id = ?", c.Param("id")).First(&post).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+	db.Delete(&post)
+
+	c.JSON(http.StatusOK, gin.H{"data": true})
+}
